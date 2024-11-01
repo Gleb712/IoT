@@ -3,7 +3,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import random
 import time
-
+import server
 
 class IoTDeviceApp:
     def __init__(self, root):
@@ -37,23 +37,23 @@ class IoTDeviceApp:
         control_frame = tk.Frame(self.root)
         control_frame.pack(side=tk.BOTTOM, fill=tk.X)
 
-        tk.Radiobutton(control_frame, text="Авто", variable=self.auto_mode, value=True, command=self.toggle_mode).pack(
-            side=tk.LEFT)
+        tk.Radiobutton(control_frame, text="Авто", variable=self.auto_mode, value=True,
+                       command=self.toggle_mode).pack(side=tk.LEFT)
         tk.Radiobutton(control_frame, text="Ручной", variable=self.auto_mode, value=False,
                        command=self.toggle_mode).pack(side=tk.LEFT)
 
         self.ac_limit = tk.DoubleVar(value=26.0)  # Порог для кондиционера
-        self.ac_limit_scale = tk.Scale(control_frame, from_=15, to=35, orient=tk.HORIZONTAL, variable=self.ac_limit,
-                                       label="Порог AC")
+        self.ac_limit_scale = tk.Scale(control_frame, from_=15, to=35, orient=tk.HORIZONTAL,
+                                       variable=self.ac_limit, label="Порог AC")
         self.ac_limit_scale.pack(side=tk.LEFT)
 
-        self.time_slider = tk.Scale(control_frame, from_=1, to=30, orient=tk.HORIZONTAL, variable=self.update_interval,
-                                    label="Частота обновления (с)")
+        self.time_slider = tk.Scale(control_frame, from_=1, to=30, orient=tk.HORIZONTAL,
+                                    variable=self.update_interval, label="Частота обновления (с)")
         self.time_slider.pack(side=tk.LEFT)
 
         # Кнопка для включения/выключения кондиционера в ручном режиме
-        self.manual_ac_button = tk.Button(control_frame, text="Включить/Выключить кондиционер", command=self.toggle_ac,
-                                          state=tk.DISABLED)
+        self.manual_ac_button = tk.Button(control_frame, text="Включить/Выключить кондиционер",
+                                          command=self.toggle_ac, state=tk.DISABLED)
         self.manual_ac_button.pack(side=tk.LEFT)
 
         self.message_label = None  # Хранение метки сообщения
@@ -91,7 +91,7 @@ class IoTDeviceApp:
             self.update_message_label()
 
         # Обновление температуры
-        if self.ac_on and self.auto_mode.get():
+        if self.ac_on:
             new_temp -= 0.5  # Симуляция работы кондиционера (понижение температуры)
 
         self.temperatures.append(new_temp)
@@ -121,4 +121,11 @@ class IoTDeviceApp:
 if __name__ == "__main__":
     root = tk.Tk()
     app = IoTDeviceApp(root)
+
+    # Запускаем MQTT клиент
+    import threading
+    mqtt_thread = threading.Thread(target=server.start_mqtt, args=(app,))
+    mqtt_thread.daemon = True
+    mqtt_thread.start()
+
     root.mainloop()
