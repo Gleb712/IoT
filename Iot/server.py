@@ -76,7 +76,7 @@ def start_mqtt(app_instance):
 
     client.connect(BROKER, PORT, keepalive=60)
 
-    # Начинаем публикацию данных датчиков каждые несколько секунд
+    # Начинаем публикацию данных датчиков раз в период
     client.loop_start()
     while True:
         publish_sensor_data(client)
