@@ -76,8 +76,10 @@ class IoTDeviceApp:
         # Генерация температуры с плавными изменениями
         if len(self.temperatures) == 0:
             new_temp = random.uniform(20, 30)
-        else:
+        elif self.ac_on:
             new_temp = self.temperatures[-1] + random.uniform(-0.5, 0.5)
+        else:
+            new_temp = self.temperatures[-1] + random.uniform(-0.2, 1.0)
             new_temp = max(15, min(35, new_temp))  # Ограничение температуры
 
         # Проверка на включение кондиционера

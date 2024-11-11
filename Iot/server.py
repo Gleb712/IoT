@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
 import json
-from main import IoTDeviceApp  # Импортируем класс для управления кондиционером
+from main import IoTDeviceApp  # noqa # Импортируем класс для управления кондиционером
 
 # Настройки брокера и топиков
 BROKER = "test.mosquitto.org"
