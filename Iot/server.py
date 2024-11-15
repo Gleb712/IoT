@@ -9,6 +9,7 @@ PORT = 1883
 TOPIC_SENSOR = "Iot/sensor"
 TOPIC_MODE = "Iot/mode"
 TOPIC_ACTUATOR = "Iot/actuator"
+sensor_data = None
 
 # Объект приложения для доступа к состояниям и данным
 app = None
@@ -47,6 +48,7 @@ def on_message(client, userdata, msg):
 # Функция публикации данных датчиков на сервер
 def publish_sensor_data(client):
     global app
+    global sensor_data
     if app:
         # Берем последние данные температуры и времени
         current_time = time.time() - app.start_time
@@ -57,8 +59,8 @@ def publish_sensor_data(client):
 
         # Создаем JSON-объект с данными
         sensor_data = {
-            "temperature": temperature,
-            "time": round(current_time, 2)  # Время с начала работы
+            "Температура": temperature,
+            "Время": round(current_time, 2)  # Время с начала работы
         }
 
         # Публикуем данные

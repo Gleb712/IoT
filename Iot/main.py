@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import random
 import time
 import server
+import telegram_bot
 
 class IoTDeviceApp:
     def __init__(self, root):
@@ -129,5 +130,9 @@ if __name__ == "__main__":
     mqtt_thread = threading.Thread(target=server.start_mqtt, args=(app,))
     mqtt_thread.daemon = True
     mqtt_thread.start()
+
+    bot_thread = threading.Thread(target=telegram_bot.main)
+    bot_thread.daemon = True  # Устанавливаем поток как демон, чтобы он завершился при закрытии основного окна
+    bot_thread.start()
 
     root.mainloop()
