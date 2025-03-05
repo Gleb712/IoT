@@ -11,7 +11,7 @@ class IoTDeviceApp:
         self.root = root
         self.root.title("Управление температурой IoT")
 
-        self.auto_mode = tk.BooleanVar(value=True)  # Автоматический режим
+        self.auto_mode = True  # Автоматический режим
         self.ac_on = False  # Состояние кондиционера
         self.temperatures = []  # Список температур
         self.times = []  # Список времени
@@ -61,7 +61,7 @@ class IoTDeviceApp:
         self.update_plot()
 
     def toggle_mode(self):
-        if self.auto_mode.get():
+        if self.auto_mode:
             self.manual_ac_button.config(state=tk.DISABLED)  # Отключение кнопки в авто режиме
         else:
             self.manual_ac_button.config(state=tk.NORMAL)  # Включение кнопки в ручном режиме
@@ -85,11 +85,11 @@ class IoTDeviceApp:
 
         # Проверка на включение кондиционера
         if new_temp >= self.ac_limit.get():
-            if self.auto_mode.get():
+            if self.auto_mode:
                 self.ac_on = True  # Автоматическое включение кондиционера
             self.update_message_label()
         else:
-            if self.auto_mode.get():
+            if self.auto_mode:
                 self.ac_on = False  # Автоматическое выключение кондиционера
             self.update_message_label()
 
