@@ -41,7 +41,6 @@ def on_message(client, userdata, msg):
         print(f"Режим работы изменен: {'Авто' if new_mode else 'Ручной'}")
 
     elif msg.topic == TOPIC_ACTUATOR:
-
         # Включение/выключение кондиционера в ручном режиме
         if not app.auto_mode:
             app.ac_on = not app.ac_on
@@ -60,7 +59,8 @@ def publish_sensor_data(client):
         if app.temperatures:
             temperature = app.temperatures[-1]
         else:
-            temperature = 20  # Если данных нет, используем дефолтное значение
+            temperature = None  # Если данных нет, используем дефолтное значение
+            print("Нет данных о температуре") # Выводим сообщение об ошибке
 
         # Публикуем данные
         client.publish(TOPIC_SENSOR, temperature)
